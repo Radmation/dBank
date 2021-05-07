@@ -6,7 +6,6 @@ import dbank from "../dbank.png";
 import Web3 from "web3";
 import "./App.css";
 
-//h0m3w0rk - add new tab to check accrued interest
 
 class App extends Component {
   constructor(props) {
@@ -24,17 +23,12 @@ class App extends Component {
     };
   }
 
-  /**
-   * Lifecycle Method - this is is called before everything else. Let's us make API calls or antyhing else needed before anything else happens.
-   */
+  // React Lifecycle Method - this is is called before everything else. Let's us make API calls or antyhing else needed before anything else happens.
   async componentWillMount() {
     await this.loadBlockchainData();
   }
 
   async loadBlockchainData() {
-    // Check if the user is already connected.
-    console.log("load called.");
-
     // Check if ethereum object is set on window. Retrieved from MetaMask browser extension.
     if (typeof window.ethereum !== "undefined") {
       const web3 = new Web3(window.web3.currentProvider);
@@ -42,9 +36,6 @@ class App extends Component {
       const accounts = await window.ethereum.request({
         method: "eth_requestAccounts",
       });
-
-      console.log("loadBlockchainData");
-      console.log(accounts);
 
       // Check if logged in with MetaMask
       if (typeof accounts[0] === "undefined") {
@@ -77,6 +68,7 @@ class App extends Component {
           dBank: dBank,
           dBankAddress: Dbank.networks[netId].address,
         });
+        
       } catch (e) {
         window.alert("Error", e);
         console.log(e);
@@ -88,8 +80,6 @@ class App extends Component {
   }
 
   async deposit(amount) {
-    console.log(amount);
-
     if (this.state.dBank !== "undefined") {
       try {
         await this.state.dBank.methods
@@ -99,9 +89,6 @@ class App extends Component {
         console.log("Error with deposit: " + e);
       }
     }
-
-    //check if this.state.dbank is ok
-    //in try block call dBank deposit();
   }
 
   async withdraw(e) {
@@ -117,9 +104,6 @@ class App extends Component {
     }
   }
 
-  /**
-   * Connect our wallet.
-   */
   async connectWallet() {
     if (typeof window.ethereum !== "undefined") {
       await window.ethereum.request({ method: "eth_requestAccounts" });
@@ -182,7 +166,6 @@ class App extends Component {
             </div>
           </div>
         </section>
-
         <div className="container-fluid mt-5 text-center">
           <br />
           <h1>This is a Decentralized Bank</h1>
@@ -203,7 +186,7 @@ class App extends Component {
                         onSubmit={(e) => {
                           e.preventDefault();
                           let amount = this.depositAmount.value;
-                          amount = amount * 10 ** 18; // Convert to wei.
+                          amount = amount * 10 ** 18; // Convert to wei. We could use web3 for this.
                           this.deposit(amount);
                         }}
                       >
@@ -213,8 +196,7 @@ class App extends Component {
                             id="depositAmount"
                             step="0.01"
                             min="0.01"
-                            p
-                            laceholder="amount..."
+                            placeholder="amount..."
                             className="form-control"
                             required
                             ref={(input) => {
@@ -246,7 +228,6 @@ class App extends Component {
                       </button>
                     </div>
                   </Tab>
-                  {/*add Tab withdraw*/}
                 </Tabs>
               </div>
             </main>
